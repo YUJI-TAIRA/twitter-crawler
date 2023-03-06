@@ -1,0 +1,49 @@
+version: "3"
+
+services:
+  database: 
+    image: mysql:8.0
+    restart: always
+    tty: true
+    environment:
+      MYSQL_DATABASE: database
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+    ports: 
+      - 3306:3306
+    command: --port 3306
+    volumes: 
+      - ./database/initdb.d:/docker-entrypoint-initdb.d
+      - ./database/conf.d:/etc/myaql/conf.d
+      - ./database/log/mysql:/var/log/mysql
+
+  backend:
+    links:
+      - database
+    build:
+      context: ./backend/
+      dockerfile: ./Dockerfile
+    tty: true
+    ports:
+      - 8000:8000
+    expose:
+      - 8000
+    volumes:
+      - ./backend:/app
+
+  # frontend:
+  #   build:
+  #     context: ./frontend/
+  #     dockerfile: ./Dockerfile
+  #   ports:
+  #     - 3000:3000
+  #   expose:
+  #     - 3000
+  #   privileged: true
+  #   restart: always
+  #   stdin_open: true
+  #   tty: true
+  #   command: /bin/sh
+  #   volumes:
+  #     - ./frontend:/src
