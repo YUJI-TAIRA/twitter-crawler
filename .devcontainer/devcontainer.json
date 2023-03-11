@@ -29,7 +29,8 @@
 			},
 			"extensions": [
 				"ms-python.python",
-				"ms-python.vscode-pylance"
+				"ms-python.vscode-pylance",
+				"KevinRose.vsc-python-indent"
 			]
 		}
 	}
