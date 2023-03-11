@@ -6,14 +6,13 @@ from sqlalchemy.orm import sessionmaker
 from app import settings
 
 async_engine = create_async_engine(
-    settings.db_async_connection_str,
-    echo=True,
-    future=True
+    settings.db_async_connection_str, echo=True, future=True
 )
 
 async_session_maker = sessionmaker(
     bind=async_engine, class_=AsyncSession, expire_on_commit=False
 )
+
 
 async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
     async with async_session_maker() as session:

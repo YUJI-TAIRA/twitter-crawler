@@ -5,6 +5,7 @@ import secrets
 
 
 class Settings(BaseSettings):
+    PROJECT_NAME: str
     API_VERSION: str = "v2"
     API_STR: str = "/api/"
     TWITTER_BEARER_TOKEN: str
@@ -33,7 +34,7 @@ class Settings(BaseSettings):
             path=f"/{values.get('DATABASE_NAME') or ''}",
         )
 
-    FIRST_SUPERUSER_EMAIL: EmailStr
+    FIRST_SUPERUSER_EMAIL: str
     FIRST_SUPERUSER_PASSWORD: str
 
     SECRET_KEY: str = secrets.token_urlsafe(32)
@@ -51,6 +52,7 @@ class Settings(BaseSettings):
     class Config:
         case_sensitive = True
         env_file = os.path.expanduser("~/.env")
+        print(env_file)
 
 
 settings = Settings()

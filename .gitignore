@@ -2,3 +2,4 @@ memo.txt
 .env
 .env.production
 __pycache__
+db_docker/

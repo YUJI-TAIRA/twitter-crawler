@@ -2,21 +2,23 @@ version: "3"
 
 services:
   database: 
-    image: mysql:8.0
+    image: bitnami/postgresql:latest
     restart: always
     tty: true
+    env_file: ".env"
+    ports:
+      - 5454:5432  # Remove this on productionzwszsSÍ
+    expose:
+      - 5432
     environment:
-      MYSQL_DATABASE: database
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
-      MYSQL_ROOT_PASSWORD: password
-    ports: 
-      - 3306:3306
-    command: --port 3306
-    volumes: 
-      - ./database/initdb.d:/docker-entrypoint-initdb.d
-      - ./database/conf.d:/etc/myaql/conf.d
-      - ./database/log/mysql:/var/log/mysql
+      - POSTGRES_USERNAME=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DATABASE=${DATABASE_NAME}
+      - POSTGRES_HOST_AUTH_METHOD= "trust"
+      - POSTGRESQL_POSTGRES_PASSWORD= ${DATABASE_PASSWORD}
+    user: root
+    volumes:
+      - ./db_docker:/bitnami/postgresql
 
   backend:
     links:
@@ -25,6 +27,7 @@ services:
       context: ./backend/
       dockerfile: ./Dockerfile
     tty: true
+    env_file: ".env"
     ports:
       - 8000:8000
     expose:
